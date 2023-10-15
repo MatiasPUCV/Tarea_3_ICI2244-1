@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
+#include <string.h>
 
 static size_t s_mallocCalls;
 static size_t s_freeCalls;
@@ -41,6 +42,7 @@ void Free(void* ptr)
     s_freeCalls++;
 }
 
+// printf en verde
 void Success(const char* fmt, ...)
 {
     va_list args;
@@ -54,7 +56,7 @@ void Success(const char* fmt, ...)
     va_end(args);
 }
 
-// printf() pero con "[error] " de sufijo en rojo
+// printf() pero con "[error]: " de sufijo en rojo
 void Error(const char* fmt, ...)
 {
     va_list args;
@@ -77,3 +79,4 @@ void End()
     else
         Success("\n¡Se ha liberado toda la memoria!");
 }
+

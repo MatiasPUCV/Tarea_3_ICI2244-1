@@ -1,26 +1,26 @@
 #include "hashmap.h"
 #include "util.h"
+#include "file.h"
+
 
 #include <stdio.h>
+#include <string.h>
+
 
 int main()
 {
+    List* list = GetDirList("books");
 
-    HashMap* map = CreateMap();
-
-    int x = 45;
-    const char* str = "LOL";
-    InsertMap(map, str, &x);
-
-    Pair* pair = NextMap(map);
-    if (pair == NULL)
+    while (FirstList(list) != NULL)
     {
-        Error("AAAAAAAAAAAAAAAAAAAAAAAA");
+        File* data = PopFront(list);
+        Error("%s", data->dir);
+        FreeFile(data);
     }
 
-    printf("%i", *(int*)(pair->value));
+    Free(list);
     
-
+    
     End();
     return 0;
 }
