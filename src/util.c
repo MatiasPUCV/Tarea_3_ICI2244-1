@@ -38,6 +38,9 @@ void* Calloc(size_t count, size_t size)
 
 void Free(void* ptr)
 {
+    if (ptr == NULL)
+        return;
+
     free(ptr);
     s_freeCalls++;
 }
@@ -46,7 +49,6 @@ void Free(void* ptr)
 void Success(const char* fmt, ...)
 {
     va_list args;
-
     va_start(args, fmt);
 
     printf("\x1b[38;2;40;150;35m");
