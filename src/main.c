@@ -40,8 +40,8 @@ void GetFile(const char* filename)
     }
 
     char backlist[] = ".,:;(){}[]";
-
     char word[500];
+    
     while (fscanf(file, "%s", word) == 1)
     {
         int len = strlen(word);

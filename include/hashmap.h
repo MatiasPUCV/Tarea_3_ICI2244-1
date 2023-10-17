@@ -1,17 +1,14 @@
 #ifndef HASHMAP_H
 #define HASHMAP_H
 
-typedef struct HashMap HashMap;
 
-typedef struct Pair 
-{
-    const char* key;
-    void* value;
-} Pair;
+#include "pair.h"
+
+typedef struct HashMap HashMap;
 
 HashMap* CreateMap();
 
-void InsertMap(HashMap* table, const char* key, void* value);
+void InsertMap(HashMap* table, char* key, void* value);
 void EraseMap(HashMap* table, const char* key);
 
 Pair* SearchMap(HashMap* table, const char* key);

@@ -14,19 +14,6 @@ struct HashMap
     long current;  
 };
 
-Pair* CreatePair(const char* key, void* value)
-{
-    if (key == NULL || value == NULL)
-        return NULL;
-
-    Pair* temp = (Pair*)Malloc(sizeof(Pair));
-
-    temp->key = key;
-    temp->value = value;
-
-    return temp;
-}
-
 long Hash(const char *key, long capacity)
 {
     unsigned long hash = 0;
@@ -75,7 +62,7 @@ HashMap* CreateMap()
     return hashMap;
 }
 
-void InsertMap(HashMap* table, const char* key, void* value)
+void InsertMap(HashMap* table, char* key, void* value)
 {
     if (table == NULL || key == NULL || value == NULL)
         return;
