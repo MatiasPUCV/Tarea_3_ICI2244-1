@@ -55,11 +55,12 @@ void AppTick(bool* close, AppData* data)
     printf("-----------------------------------\n");
     printf(" 1) Cargar Documentos\n");
     printf(" 2) Mostrar Documentos\n");
+    printf(" 3) Buscar libro\n");
     printf(" 0) Cerrar Applicación\n");
     printf("-----------------------------------\n");
     
     int code = GetIntFromInput();
-    Success("%i", code);
+    printf("\n");
 
     switch (code)
     {
@@ -71,6 +72,11 @@ void AppTick(bool* close, AppData* data)
     case 2:
         Success("Mostrar Documentos");
         AppShowBooks(data);
+        break;
+
+    case 3:
+        Success("Buscar libro");
+        AppSearchBook(data);
         break;
 
     default:

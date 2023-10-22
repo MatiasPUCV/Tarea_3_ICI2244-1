@@ -14,5 +14,6 @@ void FreeAppData(AppData* data);
 
 void AppLoadDocuments(AppData* data);
 void AppShowBooks(AppData* data);
+void AppSearchBook(AppData* data);
 
 #endif

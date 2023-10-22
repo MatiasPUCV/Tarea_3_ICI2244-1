@@ -18,10 +18,13 @@ AppData* CreateAppData()
 void FreeAppData(AppData* data)
 {
     Pair* pair = FirstTreeMap(data->books);
+    
     while(pair != NULL)
     {
         Book* book = (Book*)(pair->value);
-        printf("%s\n", book->title);
+        FreeBook(book);
+        Free(pair);
+
         pair = NextTreeMap(data->books);
     }
     
@@ -84,21 +87,74 @@ void AppLoadDocuments(AppData* data)
     }
 
     Free(files);
-
+    Free(str);
 }
 
+// Recorrer el mapa de los libros y muestra su informacion
 void AppShowBooks(AppData* data)
 {
     Pair* pair = FirstTreeMap(data->books);
-    
-    if (pair == NULL)
-        return;
-
     while(pair != NULL)
     {
         Book* book = (Book*)(pair->value);
+
         printf("Titulo N°%i: \"%s\"\n", book->id, book->title);
         printf("Palabras: %i | Caracterers: %i\n\n", book->word_cout, book->char_count);
+
         pair = NextTreeMap(data->books);
     }
+}
+
+void AppSearchBook(AppData* data)
+{
+    char* input = GetStrFromInput();
+
+    List* words = SeparateStr(input);
+    List* books = CreateList();
+
+    Pair* pair = FirstTreeMap(data->books);
+    while(pair != NULL)
+    {
+        Book* book = (Book*)(pair->value);
+        PushFront(books, book);
+
+        pair = NextTreeMap(data->books);
+    }
+
+    while (FirstList(words) != NULL)
+    {
+        char* str = PopFront(words);
+
+        Book* book = FirstList(books);
+        while (book != NULL)
+        {
+            Error("%s", book->title);
+
+            Pair* pair = SearchMap(book->title_words, str);
+
+            if(pair == NULL)
+            {
+                PopCurrent(books);
+            }
+
+            book = NextList(books);
+        }
+        
+        Free(str);
+    }
+    
+    // Mensaje
+    if (FirstList(books) != NULL)
+        printf("Libros encontrados:\n");
+    else
+        printf("No se encontraron coinsidencias\n");
+
+    // Muestra libros encontrados
+    while (FirstList(books) != NULL)
+    {
+        Book* book = PopFront(books);
+        printf("%s\n", book->title);
+    }
+    
+    Free(input);
 }

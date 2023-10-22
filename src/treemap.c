@@ -129,15 +129,13 @@ void InsertTreeMap(TreeMap* tree, void* key, void* value)
 
 TreeNode* Minimum(TreeNode* x)
 {
-    TreeNode* current = x;
+    if(x==NULL)
+        return NULL;
 
-    while (current != NULL)
-    {
-        if (current->left != NULL)
-            current = current->left;
-        else
-            return current;
-    }
+    while (x->left != NULL)
+        x = x->left;
+    
+    return x;
 }
 
 void RemoveNodeHelper(TreeMap* tree, TreeNode* node, void* val)

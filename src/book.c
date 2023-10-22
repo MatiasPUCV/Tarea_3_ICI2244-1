@@ -10,6 +10,7 @@
 char* GetTitle(const char* path);
 void GetFileWordData(const char* filename, int* wcount, int* ccount, HashMap* map);
 char* RemoveFromWord(char* word);
+void GetTitleWord(HashMap* map, char* title);
 
 Book* CreateBook(File* file)
 {
@@ -22,8 +23,10 @@ Book* CreateBook(File* file)
     temp->char_count = 0;
 
     temp->words = CreateMap();
-    //temp->title_words = CreateMap();
+    temp->title_words = CreateMap();
+
     GetFileWordData(file->dir, &temp->word_cout, &temp->char_count, temp->words);
+    GetTitleWord(temp->title_words, temp->title);
 
     return temp;
 }
@@ -31,8 +34,9 @@ Book* CreateBook(File* file)
 void FreeBook(Book* book)
 {
     Free(book->title);
-    FreeMap(book->words, true, false);
 
+    FreeMap(book->words, true, false);
+    //FreeMap(book->title_words, true, false);
 
     Free(book);
 }
@@ -126,4 +130,19 @@ char* RemoveFromWord(char* word)
     strlwr(word2);
 
     return word2;
+}
+
+void GetTitleWord(HashMap* map, char* title)
+{
+    List* list = SeparateStr(title);
+
+    while (FirstList(list) != NULL)
+    {
+        char* temp = PopFront(list);
+        strlwr(temp);
+
+        InsertMap(map, temp, (void*)true);
+
+    }
+
 }
