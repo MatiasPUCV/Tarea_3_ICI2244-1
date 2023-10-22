@@ -15,3 +15,14 @@ Pair* CreatePair(char* key, void* value)
 
     return temp;
 }
+
+bool IsEmptyPair(Pair* pair)
+{
+    if (pair == NULL)
+        return true;
+
+    if (pair->key == NULL)
+        return true;
+
+    return false;
+}

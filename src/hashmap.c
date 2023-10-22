@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include <stdio.h>
 
 struct HashMap
 {
@@ -34,17 +35,6 @@ int IsEqual(const void *key1, const void *key2)
         return 1;
 
     return 0;
-}
-
-bool IsEmptyPair(Pair* pair)
-{
-    if (pair == NULL)
-        return true;
-
-    if (pair->key == NULL)
-        return true;
-
-    return false;
 }
 
 HashMap* CreateMap()
@@ -199,4 +189,10 @@ Pair* NextMap(HashMap* table)
     table->current = pos;
   
     return FirstMap(table);
+}
+
+void FreeMap(HashMap* map)
+{
+    Free(map->buckets);
+    Free(map);
 }

@@ -16,5 +16,6 @@ Pair* FirstMap(HashMap* table);
 Pair* NextMap(HashMap* table);
 
 void EnlargeMap(HashMap* map);
+void FreeMap(HashMap* map);
 
 #endif
