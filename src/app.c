@@ -5,9 +5,29 @@
 #include "book.h"
 
 #include <string.h>
+#include <stdio.h>
 
+AppData* CreateAppData()
+{
+    AppData* temp = Malloc(sizeof(AppData));
+    temp->books = CreateTreeMap(lower_than_string);
 
-void AppLoadDocuments()
+    return temp;
+}
+
+void FreeAppData(AppData* data)
+{
+    Pair* pair = FirstTreeMap(data->books);
+    while(pair != NULL)
+    {
+        Book* book = (Book*)(pair->value);
+        printf("%s\n", book->title);
+        pair = NextTreeMap(data->books);
+    }
+    
+}
+
+void AppLoadDocuments(AppData* data)
 {
     char* str = GetStrFromInput();
     List* list = SeparateStr(str);
@@ -20,10 +40,10 @@ void AppLoadDocuments()
         char* temp = PopFront(list);
 
         if (IsTxt(temp))
-            PushBack(files, CreateFileFromPath(temp));
+            PushFront(files, CreateFileFromPath(temp));
 
         else if (strchr(temp, '.') == NULL)
-            PushBack(dirs, temp);
+            PushFront(dirs, temp);
     }
 
     Free(list);
@@ -39,7 +59,7 @@ void AppLoadDocuments()
             
             if(IsTxt(temp2->dir))
             {
-                PushBack(files, temp2);
+                PushFront(files, temp2);
             }
             else
                 FreeFile(temp2);
@@ -49,18 +69,36 @@ void AppLoadDocuments()
 
     Free(dirs);
 
+    int i = 0;
     while (FirstList(files) != NULL)
     {
-        File* data = PopFront(files);
-        Error("%s", data->dir);
+        File* file = PopFront(files);
+        
+        printf("Cargando \"%s\"...\n", file->dir);
+        Book* book = CreateBook(file);
+        Success("¡\"%s\" cargado!\n", book->title);
 
-        Book* book = CreateBook(data);
+        InsertTreeMap(data->books, book->title, book);
 
-        Success("FREE TIME");
-        FreeBook(book);
-        FreeFile(data);
+        FreeFile(file);
     }
 
     Free(files);
 
+}
+
+void AppShowBooks(AppData* data)
+{
+    Pair* pair = FirstTreeMap(data->books);
+    
+    if (pair == NULL)
+        return;
+
+    while(pair != NULL)
+    {
+        Book* book = (Book*)(pair->value);
+        printf("Titulo N°%i: \"%s\"\n", book->id, book->title);
+        printf("Palabras: %i | Caracterers: %i\n\n", book->word_cout, book->char_count);
+        pair = NextTreeMap(data->books);
+    }
 }

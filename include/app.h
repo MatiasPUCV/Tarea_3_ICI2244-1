@@ -9,6 +9,10 @@ typedef struct AppData
 
 } AppData;
 
-void AppLoadDocuments();
+AppData* CreateAppData();
+void FreeAppData(AppData* data);
+
+void AppLoadDocuments(AppData* data);
+void AppShowBooks(AppData* data);
 
 #endif

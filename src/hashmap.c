@@ -85,8 +85,6 @@ void EnlargeMap(HashMap* table)
     if (table == NULL)
         return;
 
-    Success("Enlarge! %i", table->capacity);
-
     Pair** oldBuckets = table->buckets;
     size_t oldCapacity = table->capacity;
 

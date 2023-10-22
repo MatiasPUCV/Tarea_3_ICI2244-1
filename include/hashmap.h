@@ -19,4 +19,7 @@ Pair* NextMap(HashMap* table);
 void EnlargeMap(HashMap* map);
 void FreeMap(HashMap* map, bool free_key, bool free_value);
 
+
+int lower_than_string(void* key1, void* key2);
+
 #endif
