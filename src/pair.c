@@ -8,7 +8,7 @@ Pair* CreatePair(char* key, void* value)
     if (key == NULL || value == NULL)
         return NULL;
 
-    Pair* temp = (Pair*)Malloc(sizeof(Pair));
+    Pair* temp = (Pair*)Calloc(1, sizeof(Pair));
 
     temp->key = key;
     temp->value = value;

@@ -1,8 +1,9 @@
 #ifndef HASHMAP_H
 #define HASHMAP_H
 
-
 #include "pair.h"
+
+#include <stdbool.h>
 
 typedef struct HashMap HashMap;
 
@@ -16,6 +17,6 @@ Pair* FirstMap(HashMap* table);
 Pair* NextMap(HashMap* table);
 
 void EnlargeMap(HashMap* map);
-void FreeMap(HashMap* map);
+void FreeMap(HashMap* map, bool free_key, bool free_value);
 
 #endif

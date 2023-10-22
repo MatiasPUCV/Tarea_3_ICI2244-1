@@ -21,7 +21,7 @@ Book* CreateBook(File* file)
     temp->char_count = 0;
 
     temp->words = CreateMap();
-    temp->title_words = CreateMap();
+    //temp->title_words = CreateMap();
     GetFileWordData(file->dir, &temp->word_cout, &temp->char_count, temp->words);
 
     return temp;
@@ -30,29 +30,9 @@ Book* CreateBook(File* file)
 void FreeBook(Book* book)
 {
     Free(book->title);
-
-    Pair* temp1 = FirstMap(book->words);
-    Pair* end1 = temp1;
-
-    if (!IsEmptyPair(temp1))
-    {
-        Free(temp1->key);
-        Free(temp1);
-    }
-
-    temp1 = NextMap(book->words);
-    while (!IsEmptyPair(temp1) && temp1 != end1)
-    {
-        Free(temp1->key);
-        Free(temp1);
-
-        temp1 = NextMap(book->words);
-    }
-
-    FreeMap(book->words);
+    FreeMap(book->words, true, false);
 
 
-    FreeMap(book->title_words);
     Free(book);
 }
 

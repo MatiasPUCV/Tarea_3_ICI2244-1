@@ -4,20 +4,19 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdbool.h>
 #include <stdio.h>
 
 struct HashMap
 {
     Pair** buckets;
-    long size;
-    long capacity;
-    long current;  
+    size_t size;
+    size_t capacity;
+    size_t current;  
 };
 
-long Hash(const char *key, long capacity)
+size_t Hash(const char *key, size_t capacity)
 {
-    unsigned long hash = 0;
+    size_t hash = 0;
     const char* ptr;
 
     for (ptr = key; *ptr != '\0'; ptr++)
@@ -39,7 +38,7 @@ int IsEqual(const void *key1, const void *key2)
 
 HashMap* CreateMap()
 {
-    const long capacity = 2;
+    size_t capacity = 2;
 
     HashMap* hashMap = (HashMap*)Malloc(sizeof(HashMap));
 
@@ -86,19 +85,19 @@ void EnlargeMap(HashMap* table)
     if (table == NULL)
         return;
 
-    Success("Enlarge!");
+    Success("Enlarge! %i", table->capacity);
 
     Pair** oldBuckets = table->buckets;
-    long oldCapacity = table->capacity;
+    size_t oldCapacity = table->capacity;
 
     table->size = 0;
     table->capacity *= 2;
 
     table->buckets = (Pair**)Calloc(table->capacity, sizeof(Pair*));
 
-    for (long l = 0; l < oldCapacity; l++)
+    for (size_t i = 0; i < oldCapacity; i++)
     {
-        Pair* temp = oldBuckets[l];
+        Pair* temp = oldBuckets[i];
 
         if (temp != NULL)
         {
@@ -128,8 +127,8 @@ Pair* SearchMap(HashMap* table, const char* key)
     if (table == NULL || key == NULL)
         return NULL;
 
-    long pos = Hash(key, table->capacity);
-    long temp = pos;
+    size_t pos = Hash(key, table->capacity);
+    size_t temp = pos;
 
     bool stop = false;
 
@@ -160,8 +159,8 @@ Pair* FirstMap(HashMap* table)
     if (table == NULL)
         return NULL;
 
-    long pos = table->current;
-    long temp = pos;
+    size_t pos = table->current;
+    size_t temp = pos;
 
     while (IsEmptyPair(table->buckets[pos]))
     {
@@ -181,7 +180,7 @@ Pair* NextMap(HashMap* table)
     if (table == NULL)
         return NULL;
 
-    long pos = table->current + 1;
+    size_t pos = table->current + 1;
 
     if (pos >= table->capacity - 1)
         pos = 0;
@@ -191,8 +190,28 @@ Pair* NextMap(HashMap* table)
     return FirstMap(table);
 }
 
-void FreeMap(HashMap* map)
+void FreeMap(HashMap* map, bool free_key, bool free_value)
 {
+    if (map == NULL)
+        return;
+
+    for (size_t i = 0; i < map->capacity; i++)
+    {
+        Pair* temp = map->buckets[i];
+        if (temp == NULL)
+            continue;
+
+        if (temp->key != NULL && free_key == true)
+            Free(temp->key);
+
+
+        if(temp->value != NULL && free_value == true)
+            Free(temp->value);
+
+
+        Free(temp);
+    }
+
     Free(map->buckets);
     Free(map);
 }

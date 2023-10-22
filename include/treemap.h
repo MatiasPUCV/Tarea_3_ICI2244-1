@@ -14,4 +14,6 @@ Pair* UpperBound(TreeMap* tree, void* key);
 Pair* FirstTreeMap(TreeMap* tree);
 Pair* NextTreeMap(TreeMap* tree);
 
+int lower_than_int(void* key1, void* key2);
+
 #endif // REEMAP_H
