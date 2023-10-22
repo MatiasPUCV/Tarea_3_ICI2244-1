@@ -9,6 +9,7 @@
 
 char* GetTitle(const char* path);
 void GetFileWordData(const char* filename, int* wcount, int* ccount, HashMap* map);
+char* RemoveFromWord(char* word);
 
 Book* CreateBook(File* file)
 {
@@ -79,30 +80,13 @@ void GetFileWordData(const char* filename, int* wcount, int* ccount, HashMap* ma
         Error("No se pudo abrir el archivo");
         return;
     }
-
-    char blacklist[] = ".,:;(){}[]";
+    
     char word[500];
     
     while (fscanf(file, "%s", word) == 1)
     {
-        int len = strlen(word);
-        int index = 0;
-
-        char* word2 = Calloc(len + 1, sizeof(char*));
-
-        for (int i = 0; i < len; i++)
-        {
-            if (strchr(blacklist, word[i]) == NULL)
-            {
-                word2[index] = word[i];
-                index++;
-            }
-
-            *ccount += 1;
-        }
-
-        word2[index + 1] = '\0';
-        strlwr(word2);
+        *ccount += strlen(word);
+        char* word2 = RemoveFromWord(word);
 
         Pair* pair = SearchMap(map, word2);
         if (IsEmptyPair(pair))
@@ -121,3 +105,25 @@ void GetFileWordData(const char* filename, int* wcount, int* ccount, HashMap* ma
     fclose(file);
 }
 
+char* RemoveFromWord(char* word)
+{
+    char blacklist[] = ".,:;(){}[]¿?¡!";
+
+    int len = strlen(word);
+    int index = 0;
+
+    char* word2 = Calloc(len + 1, sizeof(char*));
+    for (int i = 0; i < len; i++)
+    {
+        if (strchr(blacklist, word[i]) == NULL)
+        {
+            word2[index] = word[i];
+            index++;
+        }
+    }
+
+    word2[index + 1] = '\0';
+    strlwr(word2);
+
+    return word2;
+}

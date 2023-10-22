@@ -72,6 +72,86 @@ void Error(const char* fmt, ...)
     va_end(args);
 }
 
+char* GetStrFromInput()
+{
+    // Consigue el numero de opción insertada
+    char* str = Malloc(sizeof(char) * 100);
+    if (scanf("%[^\n]", str) != 1)
+    {
+        Free(str);
+        return NULL;
+    }
+
+    // Limpia el buffer de entrada
+    int c; while ((c = getchar()) != '\n' && c != EOF);
+
+    return str;
+}
+
+int GetIntFromInput()
+{
+    char* str = GetStrFromInput();
+    int code = str[0] - 48;
+
+    Free(str);
+
+    return code;
+}
+
+List* SeparateStr(char *str)
+{
+    char *copia = strdup(str);
+
+    if (copia == NULL) 
+        return NULL;
+
+    List* list = CreateList();
+
+    char* token = strtok(copia, " ");
+
+    while (token != NULL)
+    {
+        PushBack(list, token);
+        token = strtok(NULL, " ");
+    }
+
+    return list;
+}
+
+char* RemoveExtension(const char* str)
+{
+    int len = strlen(str);
+
+    int pos;
+    for (pos = 0; pos < len; pos++)
+    {
+        char c = str[len - pos - 1];
+        if (c == '.')
+            break;
+    }
+
+    char* result = Calloc(pos + 1, sizeof(char));
+    for (int i = 0; i < pos; i++)
+        result[i] = str[i];
+
+    return result;
+}
+
+
+bool IsTxt(const char *str)
+{
+    int len = strlen(str);
+    if (len < 4)
+        return false;
+    
+    const char *final = str + len - 4;
+    
+    if (strcmp(final, ".txt") == 0)
+        return true;
+    
+    return false;
+}
+
 void End()
 {
     Success("¡Programa Cerrado!\nLlamadas a malloc(): %i\nLlamadas a free():   %i", s_mallocCalls, s_freeCalls);
@@ -81,4 +161,3 @@ void End()
     else
         Success("\n¡Se ha liberado toda la memoria!");
 }
-

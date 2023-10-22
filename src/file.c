@@ -4,15 +4,24 @@
 #include <string.h>
 #include <stdio.h>
 
-
-char* RemoveExtension(const char* str);
-
 File* FileCreate(char* dir, char* name, char* no_ext)
 {
     File* file = Malloc(sizeof(File));
     file->dir    = dir;
     file->name   = name;
     file->no_ext = no_ext;
+}
+
+File* CreateFileFromPath(char* path)
+{
+    char* name = strrchr(path, '/');
+    
+    if (name != NULL)
+        name++;
+    else
+        name = path;
+
+    FileCreate(path, name, RemoveExtension(name));
 }
 
 #include <windows.h>
@@ -71,21 +80,3 @@ void FreeFile(File* file)
     Free(file);
 }
 
-char* RemoveExtension(const char* str)
-{
-    int len = strlen(str);
-
-    int pos;
-    for (pos = 0; pos < len; pos++)
-    {
-        char c = str[len - pos - 1];
-        if (c == '.')
-            break;
-    }
-
-    char* result = Calloc(pos + 1, sizeof(char));
-    for (int i = 0; i < pos; i++)
-        result[i] = str[i];
-
-    return result;
-}

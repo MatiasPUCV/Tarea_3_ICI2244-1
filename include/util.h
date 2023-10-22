@@ -4,6 +4,7 @@
 #include "list.h"
 
 #include <stddef.h>
+#include <stdbool.h>
 
 static size_t s_mallocCalls;
 static size_t s_freeCalls;
@@ -22,6 +23,12 @@ void Success(const char* fmt, ...);
 // printf() pero con "[error]: " de sufijo en rojo
 void Error(const char* fmt, ...);
 
+char* GetStrFromInput();
+int GetIntFromInput();
+
+List* SeparateStr(char* str);
+bool IsTxt(const char *str);
+char* RemoveExtension(const char* str);
 
 // Debug
 void End();
