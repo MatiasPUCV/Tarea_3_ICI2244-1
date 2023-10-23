@@ -52,6 +52,8 @@ void AppLoadDocuments(AppData* data)
         if (IsTxt(temp))
             PushFront(files, CreateFileFromPath(temp));
 
+        // si no es txt o es tiene un . no puede ser una carpeta
+        // aunque las carpetas si pueden iniciar con punto, como .git
         else if (strchr(temp, '.') == NULL)
             PushFront(dirs, temp);
     }
@@ -100,10 +102,10 @@ void AppLoadDocuments(AppData* data)
     Free(input);
 }
 
-// Recorrer el mapa de los libros y muestra su informacion
+// Recorre el mapa de los libros y muestra su información
 void AppShowBooks(AppData* data)
 {
-    // Recorre el mapa y muetra libros
+    // Recorre el mapa y muestra los libros
     Pair* pair = FirstTreeMap(data->books);
     while(pair != NULL)
     {
@@ -134,7 +136,6 @@ void AppSearchBook(AppData* data)
         pair = NextTreeMap(data->books);
     }
 
-// !FIX
     // Busca cada palabra en cada libro
     while (FirstList(words) != NULL)
     {
@@ -144,35 +145,35 @@ void AppSearchBook(AppData* data)
         Book* book = FirstList(books);
         while (book != NULL)
         {
-            //Pair* pair = SearchMap(book->title_words, str);
+            Pair* pair = SearchMap(book->title_words, str);
 
-
-            //PopCurrent(books);
-
-            printf("%s\n", book->title);
-
-            book = NextList(books);
+            if (pair != NULL)
+            {
+                book = NextList(books); // Avanzamos al siguiente libro
+            }
+            else
+            {
+                PopCurrent(books); // Esto avanza automáticamente al siguiente libro
+                book = CurrentList(books);
+            }
         }
         
         Free(str);
     }
-// !FIX
 
-#if 0
     // Mensaje
     if (FirstList(books) != NULL)
         printf("Libros encontrados:\n");
     else
         printf("No se encontraron coinsidencias\n");
 
-    // Muestra libros encontrados
+    // Muestra los libros encontrados
     while (FirstList(books) != NULL)
     {
         Book* book = PopFront(books);
         printf("%s\n", book->title);
     }
     
-#endif
-
+    Free(books);
     Free(input);
 }

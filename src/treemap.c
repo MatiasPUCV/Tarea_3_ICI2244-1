@@ -239,7 +239,6 @@ Pair* UpperBound(TreeMap* tree, void* key)
     return ub->pair;
 }
 
-// !FIX
 Pair* FirstTreeMap(TreeMap* tree)
 {
     if (tree == NULL)
@@ -250,7 +249,6 @@ Pair* FirstTreeMap(TreeMap* tree)
 
     return current->pair;
 }
-// !FIX
 
 Pair* NextTreeMap(TreeMap* tree)
 {
@@ -267,15 +265,13 @@ Pair* NextTreeMap(TreeMap* tree)
     else
     {
         while (current->parent != NULL && current == current->parent->right)
-        {
             current = current->parent;
-        }
         
         tree->current = current->parent;
+
         if (current->parent != NULL)
-        {
             return current->parent->pair;
-        }
+    
     }
 
     return NULL;

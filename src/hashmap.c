@@ -196,11 +196,11 @@ void FreeMap(HashMap* map, bool free_key, bool free_value)
         if (temp == NULL)
             continue;
 
-        if (temp->key != NULL && free_key == true)
+        if (free_key == true && temp->key != NULL)
             Free(temp->key);
 
 
-        if(temp->value != NULL && free_value == true)
+        if(free_value == true && temp->value != NULL)
             Free(temp->value);
 
 

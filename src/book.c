@@ -95,7 +95,7 @@ void GetFileWordData(const char* filename, int* wcount, int* ccount, HashMap* ma
         return;
     }
     
-    char word[500];
+    char word[100];
     
     // lee el archivo palabra a palabra
     while (fscanf(file, "%s", word) == 1)
@@ -161,4 +161,6 @@ void GetTitleWords(HashMap* map, char* title)
 
         InsertMap(map, temp, (void*)true);
     }
+
+    Free(list);
 }

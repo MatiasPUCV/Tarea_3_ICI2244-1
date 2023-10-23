@@ -64,6 +64,15 @@ void* LastList(List* list)
     return list->tail->data;
 }
 
+// Extención
+void* CurrentList(List* list)
+{
+    if (list == NULL || list->current == NULL)
+        return NULL;
+
+    return list->current->data;
+}
+
 void* PrevList(List* list)
 {
     if (list == NULL || list->current == NULL)

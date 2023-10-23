@@ -19,6 +19,7 @@ void* FirstList(List* list);
 void* NextList(List* list);
 void* LastList(List* list);
 void* PrevList(List* list);
+void* CurrentList(List* list);
 
 void PushFront(List* list, void* data);
 void PushBack(List* list, void* data);
