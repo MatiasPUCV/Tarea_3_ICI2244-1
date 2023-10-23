@@ -26,6 +26,7 @@ File* CreateFileFromPath(char* path)
 
 #include <windows.h>
 
+// Consigue la lista de archivod en una carpeta
 List* GetDirList(const char* directory)
 {
     // Crea la str de la dirección
@@ -49,6 +50,8 @@ List* GetDirList(const char* directory)
         if (findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
             continue;
 
+        // Crea un File
+    
         char* dir = Calloc(strlen(directory) + strlen(findFileData.cFileName) + 2, sizeof(char));
         strcat(dir, directory);
         strcat(dir, "/");
@@ -61,6 +64,9 @@ List* GetDirList(const char* directory)
 
         File* file = FileCreate(dir, name, no_ext);
 
+        //////
+        
+        // lo añade a la lista de archivo de un carpeta
         PushBack(list, file);
 
     } while (FindNextFile(hFind, &findFileData) != 0);
@@ -71,6 +77,7 @@ List* GetDirList(const char* directory)
     return list;
 }
 
+// Libera memoria de un File
 void FreeFile(File* file)
 {
     Free(file->dir);

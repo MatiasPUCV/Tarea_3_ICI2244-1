@@ -8,6 +8,7 @@
 static size_t s_mallocCalls;
 static size_t s_freeCalls;
 
+// malloc() pero con cosas para debugging 
 void* Malloc(size_t size)
 {
     void* ptr = malloc(size);
@@ -22,6 +23,7 @@ void* Malloc(size_t size)
     return ptr;
 }
 
+// calloc() pero con cosas para debugging 
 void* Calloc(size_t count, size_t size)
 {
     void* ptr = calloc(count, size);
@@ -36,6 +38,7 @@ void* Calloc(size_t count, size_t size)
     return ptr;
 }
 
+// Free pero con cosas para debugging 
 void Free(void* ptr)
 {
     if (ptr == NULL)
@@ -72,6 +75,8 @@ void Error(const char* fmt, ...)
     va_end(args);
 }
 
+// Consigue un str de input
+// (admite espacios)
 char* GetStrFromInput()
 {
     // Consigue el numero de opción insertada
@@ -88,6 +93,8 @@ char* GetStrFromInput()
     return str;
 }
 
+// Consigue un int del input esto
+// transformando el primer caracter de una str en int
 int GetIntFromInput()
 {
     char* str = GetStrFromInput();
@@ -98,6 +105,8 @@ int GetIntFromInput()
     return code;
 }
 
+// Serapara por espacios una str
+// y devuelve una lista con las separaciones
 List* SeparateStr(char *str)
 {
     char *copia = strdup(str);
@@ -137,7 +146,7 @@ char* RemoveExtension(const char* str)
     return result;
 }
 
-
+// revisa si una str termina en .txt
 bool IsTxt(const char *str)
 {
     int len = strlen(str);
@@ -152,6 +161,7 @@ bool IsTxt(const char *str)
     return false;
 }
 
+// Debugging
 void End()
 {
     Success("¡Programa Cerrado!\nLlamadas a malloc(): %i\nLlamadas a free():   %i", s_mallocCalls, s_freeCalls);

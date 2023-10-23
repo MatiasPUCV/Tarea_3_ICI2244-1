@@ -7,6 +7,7 @@
 #include <string.h>
 #include <stdio.h>
 
+// Crea información de la applicacion
 AppData* CreateAppData()
 {
     AppData* temp = Malloc(sizeof(AppData));
@@ -15,6 +16,7 @@ AppData* CreateAppData()
     return temp;
 }
 
+// libera memoria de la aplicacion
 void FreeAppData(AppData* data)
 {
     Pair* pair = FirstTreeMap(data->books);
@@ -30,14 +32,18 @@ void FreeAppData(AppData* data)
     
 }
 
+// carga los documentos
 void AppLoadDocuments(AppData* data)
 {
+    // consigue el input y lo divide en plabras
     char* str = GetStrFromInput();
     List* list = SeparateStr(str);
 
+    // listas auxiliares
     List* files = CreateList();
     List* dirs = CreateList();
 
+    // lee y valida los nombres de los archivo y carpetas
     while (FirstList(list) != NULL)
     {
         char* temp = PopFront(list);
@@ -51,6 +57,8 @@ void AppLoadDocuments(AppData* data)
 
     Free(list);
 
+    // pasa todos los archivo encontrados de las carpetas
+    // que sean .txt
     while (FirstList(dirs) != NULL)
     {
         char* temp = PopFront(dirs);
@@ -112,6 +120,8 @@ void AppSearchBook(AppData* data)
     List* words = SeparateStr(input);
     List* books = CreateList();
 
+    // Guarda punteros a los libros a una lista
+    // Esto es para poder descartar elementos
     Pair* pair = FirstTreeMap(data->books);
     while(pair != NULL)
     {
@@ -121,6 +131,7 @@ void AppSearchBook(AppData* data)
         pair = NextTreeMap(data->books);
     }
 
+    // Busca cada palabra en cada libro
     while (FirstList(words) != NULL)
     {
         char* str = PopFront(words);
@@ -128,14 +139,13 @@ void AppSearchBook(AppData* data)
         Book* book = FirstList(books);
         while (book != NULL)
         {
-            Error("%s", book->title);
 
             Pair* pair = SearchMap(book->title_words, str);
 
+            // descarta un libro
             if(pair == NULL)
-            {
                 PopCurrent(books);
-            }
+
 
             book = NextList(books);
         }
