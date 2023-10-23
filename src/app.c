@@ -29,7 +29,6 @@ void FreeAppData(AppData* data)
 
         pair = NextTreeMap(data->books);
     }
-    
 }
 
 // carga los documentos
@@ -57,7 +56,7 @@ void AppLoadDocuments(AppData* data)
 
     Free(list);
 
-    // pasa todos los archivo encontrados de las carpetas
+    // pasa todos los archivo encontrados en las carpetas
     // que sean .txt
     while (FirstList(dirs) != NULL)
     {
@@ -69,13 +68,11 @@ void AppLoadDocuments(AppData* data)
             File* temp2 = PopFront(dir_files);
             
             if(IsTxt(temp2->dir))
-            {
                 PushFront(files, temp2);
-            }
+
             else
                 FreeFile(temp2);
         }
-        
     }
 
     Free(dirs);
@@ -101,6 +98,7 @@ void AppLoadDocuments(AppData* data)
 // Recorrer el mapa de los libros y muestra su informacion
 void AppShowBooks(AppData* data)
 {
+    // Recorre el mapa y muetra libros
     Pair* pair = FirstTreeMap(data->books);
     while(pair != NULL)
     {
@@ -131,27 +129,30 @@ void AppSearchBook(AppData* data)
         pair = NextTreeMap(data->books);
     }
 
+// !FIX
     // Busca cada palabra en cada libro
     while (FirstList(words) != NULL)
     {
         char* str = PopFront(words);
 
+        // Palabra "str" en todo libro
         Book* book = FirstList(books);
         while (book != NULL)
         {
-
             Pair* pair = SearchMap(book->title_words, str);
 
             // descarta un libro
             if(pair == NULL)
+            {
                 PopCurrent(books);
-
+            }
 
             book = NextList(books);
         }
         
         Free(str);
     }
+// !FIX
     
     // Mensaje
     if (FirstList(books) != NULL)

@@ -239,6 +239,7 @@ Pair* UpperBound(TreeMap* tree, void* key)
     return ub->pair;
 }
 
+// !FIX
 Pair* FirstTreeMap(TreeMap* tree)
 {
     if (tree == NULL)
@@ -252,6 +253,7 @@ Pair* FirstTreeMap(TreeMap* tree)
 
     return NULL;
 }
+// !FIX
 
 Pair* NextTreeMap(TreeMap* tree)
 {

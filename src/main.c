@@ -20,10 +20,8 @@ int main()
     while(!close)
         AppTick(&close, data);
 
-
     FreeAppData(data);
-    End();
-
+    
     return 0;
 }
 

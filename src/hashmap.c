@@ -149,9 +149,6 @@ Pair* SearchMap(HashMap* table, const char* key)
     return table->buckets[pos];
 }
 
-
-// TODO: FIX
-
 Pair* FirstMap(HashMap* table)
 {
     if (table == NULL)
