@@ -1,6 +1,6 @@
 # Tarea_3_ICI2244-1
 
-![271742078-f7e25f5f-2a2a-4568-83e9-b1b9e08cd79a](https://github.com/MatiasPUCV/Tarea_3_ICI2244-1/assets/142541831/8e1e486d-3b5a-472d-a487-269c5af208ef)
+![265290404-697cadcf-5b6e-4fd4-9301-baa3883555c3](https://github.com/MatiasPUCV/Tarea_3_ICI2244-1/assets/142541831/421cc7c9-bd59-4d76-bce8-baab96296b87)
 
 ## Compilación:
 
@@ -26,3 +26,5 @@ Se insertan palabras y la aplicación busca los títulos con todas las coinciden
 ## Problemas conocidos
 
 En la opción 3, “Buscar libro por título” es posible que se omita uno de los documentos en la fase de descarte, llevando a resultados incorrectos. El motivo se desconoce.
+
+Por último la función de leer carpetas solo funciona en winfows.
