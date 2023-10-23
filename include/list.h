@@ -13,7 +13,7 @@ struct Node
 typedef struct List List;
 
 List* CreateList(void);
-void CleanList(List* list);
+void CleanList(List* list, void (*free_func)(void* ptr));
 
 void* FirstList(List* list);
 void* NextList(List* list);

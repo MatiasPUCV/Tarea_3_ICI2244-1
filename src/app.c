@@ -29,23 +29,25 @@ void FreeAppData(AppData* data)
 
         pair = NextTreeMap(data->books);
     }
+
+    Free(data->books);
 }
 
 // carga los documentos
 void AppLoadDocuments(AppData* data)
 {
     // consigue el input y lo divide en plabras
-    char* str = GetStrFromInput();
-    List* list = SeparateStr(str);
+    char* input = GetStrFromInput();
+    List* docs = SeparateStr(input);
 
     // listas auxiliares
     List* files = CreateList();
     List* dirs = CreateList();
 
     // lee y valida los nombres de los archivo y carpetas
-    while (FirstList(list) != NULL)
+    while (FirstList(docs) != NULL)
     {
-        char* temp = PopFront(list);
+        char* temp = PopFront(docs);
 
         if (IsTxt(temp))
             PushFront(files, CreateFileFromPath(temp));
@@ -54,7 +56,7 @@ void AppLoadDocuments(AppData* data)
             PushFront(dirs, temp);
     }
 
-    Free(list);
+    Free(docs);
 
     // pasa todos los archivo encontrados en las carpetas
     // que sean .txt
@@ -65,14 +67,17 @@ void AppLoadDocuments(AppData* data)
 
         while (FirstList(dir_files) != NULL)
         {
-            File* temp2 = PopFront(dir_files);
+            File* file = PopFront(dir_files);
             
-            if(IsTxt(temp2->dir))
-                PushFront(files, temp2);
+            if(IsTxt(file->dir))
+                PushFront(files, file);
 
             else
-                FreeFile(temp2);
+                FreeFile(file);
         }
+
+        Free(dir_files);
+        Free(temp);
     }
 
     Free(dirs);
@@ -92,7 +97,7 @@ void AppLoadDocuments(AppData* data)
     }
 
     Free(files);
-    Free(str);
+    Free(input);
 }
 
 // Recorrer el mapa de los libros y muestra su informacion
@@ -139,13 +144,12 @@ void AppSearchBook(AppData* data)
         Book* book = FirstList(books);
         while (book != NULL)
         {
-            Pair* pair = SearchMap(book->title_words, str);
+            //Pair* pair = SearchMap(book->title_words, str);
 
-            // descarta un libro
-            if(pair == NULL)
-            {
-                PopCurrent(books);
-            }
+
+            //PopCurrent(books);
+
+            printf("%s\n", book->title);
 
             book = NextList(books);
         }
@@ -153,7 +157,8 @@ void AppSearchBook(AppData* data)
         Free(str);
     }
 // !FIX
-    
+
+#if 0
     // Mensaje
     if (FirstList(books) != NULL)
         printf("Libros encontrados:\n");
@@ -167,5 +172,7 @@ void AppSearchBook(AppData* data)
         printf("%s\n", book->title);
     }
     
+#endif
+
     Free(input);
 }

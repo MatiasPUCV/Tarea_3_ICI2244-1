@@ -5,6 +5,9 @@
 #include <stdarg.h>
 #include <string.h>
 
+static size_t s_mallocCalls;
+static size_t s_freeCalls;
+
 // malloc() pero con cosas para debugging 
 void* Malloc(size_t size)
 {
@@ -14,6 +17,8 @@ void* Malloc(size_t size)
         Error("No se pudo alocar memoria.\nCerrando programa.");
         exit(1);
     }
+
+    s_mallocCalls++;
 
     return ptr;
 }
@@ -28,6 +33,8 @@ void* Calloc(size_t count, size_t size)
         exit(1);
     }
 
+    s_mallocCalls++;
+
     return ptr;
 }
 
@@ -38,6 +45,7 @@ void Free(void* ptr)
         return;
 
     free(ptr);
+    s_freeCalls++;
 }
 
 // printf en verde
@@ -151,4 +159,15 @@ bool IsTxt(const char *str)
         return true;
     
     return false;
+}
+
+// Debugging
+void End()
+{
+    Success("¡Programa Cerrado!\nLlamadas a malloc(): %i\nLlamadas a free():   %i", s_mallocCalls, s_freeCalls);
+
+    if (s_mallocCalls - s_freeCalls != 0)
+        printf("\n\x1b[38;2;135;10;21mFaltaron \x1b[38;2;180;20;23m%i\x1b[0m\x1b[38;2;135;10;21m llamadas a free()\x1b[0m\n", s_mallocCalls - s_freeCalls);
+    else
+        Success("\n¡Se ha liberado toda la memoria!");
 }
