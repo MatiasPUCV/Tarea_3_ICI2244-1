@@ -34,6 +34,7 @@ void AppTick(bool* close, AppData* data)
     printf(" 1) Cargar Documentos\n");
     printf(" 2) Mostrar Documentos\n");
     printf(" 3) Buscar libro\n");
+    printf(" 6) Buscar por palabra\n");
     printf(" 0) Cerrar Applicación\n");
     printf("-----------------------------------\n");
     
@@ -55,6 +56,11 @@ void AppTick(bool* close, AppData* data)
     case 3:
         Success("Buscar libro");
         AppSearchBook(data);
+        break;
+
+    case 6:
+        Success("Buscar por palabra");
+        SearchByWord(data);
         break;
 
     default:

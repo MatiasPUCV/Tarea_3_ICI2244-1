@@ -27,6 +27,7 @@ Book* CreateBook(File* file)
     temp->words = CreateMap();
     temp->title_words = CreateMap();
 
+
     GetFileWordData(file->dir, &temp->word_cout, &temp->char_count, temp->words);
     GetTitleWords(temp->title_words, temp->title);
 
@@ -37,10 +38,8 @@ Book* CreateBook(File* file)
 void FreeBook(Book* book)
 {
     Free(book->title);
-
-    FreeMap(book->words, true, false);
-    //FreeMap(book->title_words, true, false);
-
+    FreeMap(book->words, true, true);
+    
     Free(book);
 }
 
@@ -110,11 +109,14 @@ void GetFileWordData(const char* filename, int* wcount, int* ccount, HashMap* ma
         Pair* pair = SearchMap(map, word2);
         if (IsEmptyPair(pair))
         {
-            InsertMap(map, word2, (void*)1);
+            int* count = Malloc(sizeof(int));
+            *count = 1;
+
+            InsertMap(map, word2, count);
         }
         else
         {
-            pair->value += 1;
+            *((int*)(pair->value)) += 1;
             Free(word2);
         }
 

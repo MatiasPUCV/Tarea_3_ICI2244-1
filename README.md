@@ -25,6 +25,5 @@ Se insertan palabras y la aplicación busca los títulos con todas las coinciden
 
 ## Problemas conocidos
 
-En la opción 3, “Buscar libro por título” es posible que se omita uno de los documentos en la fase de descarte, llevando a resultados incorrectos. El motivo se desconoce.
 
-Por último la función de leer carpetas solo funciona en winfows.
+Por último la función de leer carpetas solo funciona en Microsoft Windows™.

@@ -16,4 +16,6 @@ void AppLoadDocuments(AppData* data);
 void AppShowBooks(AppData* data);
 void AppSearchBook(AppData* data);
 
+void SearchByWord(AppData* data);
+
 #endif

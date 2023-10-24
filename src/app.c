@@ -3,6 +3,7 @@
 #include "list.h"
 #include "file.h"
 #include "book.h"
+#include "heap.h"
 
 #include <string.h>
 #include <stdio.h>
@@ -85,6 +86,8 @@ void AppLoadDocuments(AppData* data)
     Free(dirs);
 
     int i = 0;
+    printf("\n");
+
     while (FirstList(files) != NULL)
     {
         File* file = PopFront(files);
@@ -149,11 +152,11 @@ void AppSearchBook(AppData* data)
 
             if (pair != NULL)
             {
-                book = NextList(books); // Avanzamos al siguiente libro
+                book = NextList(books);
             }
             else
             {
-                PopCurrent(books); // Esto avanza automáticamente al siguiente libro
+                PopCurrent(books);
                 book = CurrentList(books);
             }
         }
@@ -176,4 +179,43 @@ void AppSearchBook(AppData* data)
     
     Free(books);
     Free(input);
+}
+
+void SearchByWord(AppData* data)
+{
+    char* str = GetStrFromInput();
+    strlwr(str);
+
+    Heap* books = CreateHeap();
+
+    // Pone cada libro que tenga la palabra en un
+    // monticulo binario. esto para que los elementos salgan ordenados
+    Pair* pair = FirstTreeMap(data->books);
+    while(pair != NULL)
+    {
+        Book* book = (Book*)(pair->value);
+        
+        Pair* search = SearchMap(book->words, str);
+        
+        if(!IsEmptyPair(search))
+        {
+            int priority = *((int*)(pair->value));
+            HeapPush(books, book, priority);
+        }
+
+        pair = NextTreeMap(data->books);
+    }
+
+    // Recorre el monticulo
+    Book* book2 = HeapTop(books);
+    while (book2 != NULL)
+    {
+        printf("%s", book2->title);
+
+        HeapPop(books);
+        book2 = HeapTop(books);
+    }
+
+    FreeHeap(books);
+    Free(str);
 }

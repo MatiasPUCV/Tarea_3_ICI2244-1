@@ -5,14 +5,14 @@
 
 struct List
 {
-    Node *head;
-    Node *tail;
-    Node *current;
+    Node* head;
+    Node* tail;
+    Node* current;
 };
 
 Node* CreateNode(void* data)
 {
-    Node *temp = Malloc(sizeof(Node));
+    Node* temp = Malloc(sizeof(Node));
 
     temp->data = data;
     temp->prev = NULL;
