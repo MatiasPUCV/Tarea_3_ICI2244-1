@@ -26,8 +26,6 @@ Book* CreateBook(File* file)
     temp->words       = CreateMap();
     temp->title_words = CreateMap();
 
-    temp->top_words   = CreateTreeMap(higher_than_int);
-
     GetFileWordData(file->dir, temp);
     GetTitleWords(temp->title_words, temp->title);
 
@@ -39,14 +37,6 @@ void FreeBook(Book* book)
 {
     Free(book->title);
     FreeMap(book->words, true, true);
-
-    Pair* pair = FirstTreeMap(book->top_words);
-    while (pair != NULL)
-    {
-        Free(pair);
-        Free(pair->key);
-        pair = NextTreeMap(book->top_words);
-    }
     
     Free(book);
 }
@@ -112,6 +102,12 @@ void GetFileWordData(const char* filename, Book* book)
 
         char* word2 = RemoveFromWord(word);
 
+        if (strlen(word2) <= 3)
+        {
+            Free(word2);
+            continue;
+        }
+
         // inserta la palabra en el mapa y en el caso de ya existir
         // añade 1 a su contador
         Pair* pair = SearchMap(book->words, word2);
@@ -129,18 +125,7 @@ void GetFileWordData(const char* filename, Book* book)
             Free(word2);
         }
 
-        if (IsEmptyPair(pair))
-            continue;
-
-        int* key = ((int*)(pair->value));
-        char* value = (char*)pair->key;
-
-        Pair* search = SearchTreeMap(book->top_words, key);
-
-        if (!IsEmptyPair(search))
-            EraseTreeMap(book->top_words, key);
-
-        InsertTreeMap(book->top_words, key, value);
+        book->word_count++;
 
     }
 

@@ -3,7 +3,6 @@
 
 #include "file.h"
 #include "hashmap.h"
-#include "treemap.h"
 
 typedef struct Book
 {
@@ -15,8 +14,6 @@ typedef struct Book
 
     HashMap* words;
     HashMap* title_words;
-
-    TreeMap* top_words;
 
 } Book;
 

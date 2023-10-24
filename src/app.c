@@ -193,7 +193,7 @@ void AppSearchBook(AppData* data)
     Free(input);
 }
 
-void AppMoreFrecuentWords(AppData* data)
+void AppMoreFrequentWords(AppData* data)
 {
     char* str = GetStrFromInput();
     int id = atoi(str);
@@ -201,23 +201,46 @@ void AppMoreFrecuentWords(AppData* data)
     Pair* pair = SearchTreeMap(data->books_by_id, &id);
     if (pair == NULL)
     {
-        Error("No exite libro con ID %i", id);
+        Error("No existe libro con ID %i", id);
         Free(str);
         return;
     }
 
     Book* book = (Book*)(pair->value);
 
-    pair = FirstTreeMap(book->top_words);
-    int i = 0;
-    while(pair != NULL && i != 10)
-    {
-        printf("%s, %i\n", pair->value, *((int*)(pair->key)));
+    Heap* words = CreateHeap();
 
-        pair = NextTreeMap(book->top_words);
+    pair = FirstMap(book->words);
+    Pair* temp = pair;
+
+    do
+    {
+        int priority = *((int*)(pair->value));
+        HeapPush(words, pair, priority);
+
+        pair = NextMap(book->words);
+    }
+    while (pair != NULL && pair != temp);
+    
+    // Recorre el monticulo 10 veces
+    int i = 0;
+    Pair* word = HeapTop(words);
+    while (word != NULL && i != 10)
+    {
+        int value = *((int*)word->value);
+        double frequency =  (double)value / (double)book->word_count;
+
+        printf("%s | Frecuencia:  %lf\n", word->key, frequency);
+
+        HeapPop(words);
+        word = HeapTop(words);
         i++;
     }
 
+    while (HeapTop(words) != NULL)
+        HeapPop(words);
+    
+    FreeHeap(words);
     Free(str);
 }
 

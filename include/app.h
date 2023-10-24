@@ -16,7 +16,7 @@ void FreeAppData(AppData* data);
 void AppLoadDocuments(AppData* data);
 void AppShowBooks(AppData* data);
 void AppSearchBook(AppData* data);
-void AppMoreFrecuentWords(AppData* data);
+void AppMoreFrequentWords(AppData* data);
 
 void AppSearchByWord(AppData* data);
 

@@ -61,7 +61,7 @@ void AppTick(bool* close, AppData* data)
 
     case 4:
         Success("Palabras con mayor frecuencia");
-        AppMoreFrecuentWords(data);
+        AppMoreFrequentWords(data);
         break;
 
     case 6:
