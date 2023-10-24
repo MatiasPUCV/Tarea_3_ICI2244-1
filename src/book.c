@@ -11,24 +11,24 @@ char* GetTitle(const char* path);
 char* RemoveFromWord(char* word);
 
 void GetTitleWords(HashMap* map, char* title);
-void GetFileWordData(const char* filename, int* wcount, int* ccount, HashMap* map);
+void GetFileWordData(const char* filename, Book* book);
 
 // Crea un libro
 Book* CreateBook(File* file)
 {
     Book* temp = Malloc(sizeof(Book));
 
-    temp->id = atoi(file->no_ext);
+    temp->id    = atoi(file->no_ext);
     temp->title = GetTitle(file->dir);
-    
-    temp->word_cout = 0;
+    temp->word_count = 0;
     temp->char_count = 0;
 
-    temp->words = CreateMap();
+    temp->words       = CreateMap();
     temp->title_words = CreateMap();
 
+    temp->top_words   = CreateTreeMap(higher_than_int);
 
-    GetFileWordData(file->dir, &temp->word_cout, &temp->char_count, temp->words);
+    GetFileWordData(file->dir, temp);
     GetTitleWords(temp->title_words, temp->title);
 
     return temp;
@@ -39,6 +39,14 @@ void FreeBook(Book* book)
 {
     Free(book->title);
     FreeMap(book->words, true, true);
+
+    Pair* pair = FirstTreeMap(book->top_words);
+    while (pair != NULL)
+    {
+        Free(pair);
+        Free(pair->key);
+        pair = NextTreeMap(book->top_words);
+    }
     
     Free(book);
 }
@@ -85,7 +93,7 @@ char* GetTitle(const char* path)
 }
 
 // Conigue las palabras, su cantidad y el numero de caracteres
-void GetFileWordData(const char* filename, int* wcount, int* ccount, HashMap* map)
+void GetFileWordData(const char* filename, Book* book)
 {
     FILE* file = fopen(filename, "r");
     if (file == NULL)
@@ -100,28 +108,40 @@ void GetFileWordData(const char* filename, int* wcount, int* ccount, HashMap* ma
     while (fscanf(file, "%s", word) == 1)
     {
         // Cuenta de caracteres
-        *ccount += strlen(word);
+        book->char_count += strlen(word);
 
         char* word2 = RemoveFromWord(word);
 
         // inserta la palabra en el mapa y en el caso de ya existir
         // añade 1 a su contador
-        Pair* pair = SearchMap(map, word2);
+        Pair* pair = SearchMap(book->words, word2);
         if (IsEmptyPair(pair))
         {
             int* count = Malloc(sizeof(int));
             *count = 1;
 
-            InsertMap(map, word2, count);
+            InsertMap(book->words, word2, count);
         }
         else
         {
-            *((int*)(pair->value)) += 1;
+            int* value = ((int*)(pair->value));
+            *value += 1;
             Free(word2);
         }
 
-        // Cuenta de palabras
-        *wcount += 1;
+        if (IsEmptyPair(pair))
+            continue;
+
+        int* key = ((int*)(pair->value));
+        char* value = (char*)pair->key;
+
+        Pair* search = SearchTreeMap(book->top_words, key);
+
+        if (!IsEmptyPair(search))
+            EraseTreeMap(book->top_words, key);
+
+        InsertTreeMap(book->top_words, key, value);
+
     }
 
     fclose(file);

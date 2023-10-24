@@ -16,5 +16,6 @@ Pair* NextTreeMap(TreeMap* tree);
 
 int lower_than_string(void* key1, void* key2);
 int lower_than_int(void* key1, void* key2);
+int higher_than_int(void* key1, void* key2);
 
 #endif // REEMAP_H

@@ -7,12 +7,15 @@
 
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 // Crea información de la applicacion
 AppData* CreateAppData()
 {
     AppData* temp = Malloc(sizeof(AppData));
-    temp->books = CreateTreeMap(lower_than_string);
+
+    temp->books       = CreateTreeMap(lower_than_string);
+    temp->books_by_id = CreateTreeMap(lower_than_int);
 
     return temp;
 }
@@ -21,7 +24,6 @@ AppData* CreateAppData()
 void FreeAppData(AppData* data)
 {
     Pair* pair = FirstTreeMap(data->books);
-    
     while(pair != NULL)
     {
         Book* book = (Book*)(pair->value);
@@ -32,6 +34,15 @@ void FreeAppData(AppData* data)
     }
 
     Free(data->books);
+
+    pair = FirstTreeMap(data->books_by_id);
+    while (pair != NULL)
+    {
+        Free(pair);
+        pair = NextTreeMap(data->books_by_id);
+    }
+    
+    Free(data->books_by_id);
 }
 
 // carga los documentos
@@ -97,6 +108,7 @@ void AppLoadDocuments(AppData* data)
         Success("¡\"%s\" cargado!\n", book->title);
 
         InsertTreeMap(data->books, book->title, book);
+        InsertTreeMap(data->books_by_id, &book->id, book);
 
         FreeFile(file);
     }
@@ -115,7 +127,7 @@ void AppShowBooks(AppData* data)
         Book* book = (Book*)(pair->value);
 
         printf("Titulo N°%i: \"%s\"\n", book->id, book->title);
-        printf("Palabras: %i | Caracterers: %i\n\n", book->word_cout, book->char_count);
+        printf("Palabras: %i | Caracterers: %i\n\n", book->word_count, book->char_count);
 
         pair = NextTreeMap(data->books);
     }
@@ -181,7 +193,35 @@ void AppSearchBook(AppData* data)
     Free(input);
 }
 
-void SearchByWord(AppData* data)
+void AppMoreFrecuentWords(AppData* data)
+{
+    char* str = GetStrFromInput();
+    int id = atoi(str);
+
+    Pair* pair = SearchTreeMap(data->books_by_id, &id);
+    if (pair == NULL)
+    {
+        Error("No exite libro con ID %i", id);
+        Free(str);
+        return;
+    }
+
+    Book* book = (Book*)(pair->value);
+
+    pair = FirstTreeMap(book->top_words);
+    int i = 0;
+    while(pair != NULL && i != 10)
+    {
+        printf("%s, %i\n", pair->value, *((int*)(pair->key)));
+
+        pair = NextTreeMap(book->top_words);
+        i++;
+    }
+
+    Free(str);
+}
+
+void AppSearchByWord(AppData* data)
 {
     char* str = GetStrFromInput();
     strlwr(str);
@@ -197,11 +237,12 @@ void SearchByWord(AppData* data)
         
         Pair* search = SearchMap(book->words, str);
         
-        if(!IsEmptyPair(search))
+        if(search != NULL)
         {
             int priority = *((int*)(pair->value));
             HeapPush(books, book, priority);
         }
+
 
         pair = NextTreeMap(data->books);
     }
@@ -210,7 +251,7 @@ void SearchByWord(AppData* data)
     Book* book2 = HeapTop(books);
     while (book2 != NULL)
     {
-        printf("%s", book2->title);
+        printf("%s\n", book2->title);
 
         HeapPop(books);
         book2 = HeapTop(books);

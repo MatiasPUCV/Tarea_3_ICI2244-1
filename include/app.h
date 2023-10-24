@@ -6,6 +6,7 @@
 typedef struct AppData
 {
     TreeMap* books;
+    TreeMap* books_by_id;
 
 } AppData;
 
@@ -15,7 +16,8 @@ void FreeAppData(AppData* data);
 void AppLoadDocuments(AppData* data);
 void AppShowBooks(AppData* data);
 void AppSearchBook(AppData* data);
+void AppMoreFrecuentWords(AppData* data);
 
-void SearchByWord(AppData* data);
+void AppSearchByWord(AppData* data);
 
 #endif

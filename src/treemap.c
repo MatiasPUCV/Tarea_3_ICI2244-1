@@ -41,6 +41,14 @@ int lower_than_int(void* key1, void* key2)
     return 0;
 }
 
+int higher_than_int(void* key1, void* key2)
+{
+    if (*((int*)key1) > *((int*)key2))
+        return 1;
+
+    return 0;
+}
+
 int is_equal(TreeMap* tree, void* key1, void* key2)
 {
     if (tree->lower_than(key1, key2) == 0 && tree->lower_than(key2, key1) == 0)
@@ -140,7 +148,7 @@ TreeNode* Minimum(TreeNode* x)
 
 void RemoveNodeHelper(TreeMap* tree, TreeNode* node, void* val)
 {
-    if (node->parent->right == NULL || node->parent->left == NULL)
+    if (node == NULL || node->parent == NULL || node->parent->right == NULL || node->parent->left == NULL)
         return;
 
     if (is_equal(tree, node->parent->right->pair->key, node->pair->key))
@@ -201,7 +209,7 @@ Pair* SearchTreeMap(TreeMap* tree, void* key)
     if (tree == NULL || key == NULL)
         return NULL;
 
-    TreeNode *result = SearchTreeNode(tree, tree->root, key);
+    TreeNode* result = SearchTreeNode(tree, tree->root, key);
     tree->current = result;
 
     if (result == NULL)
