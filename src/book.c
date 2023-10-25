@@ -23,11 +23,9 @@ Book* CreateBook(File* file)
     temp->word_count = 0;
     temp->char_count = 0;
 
-    temp->words       = CreateMap();
-    temp->title_words = CreateMap();
+    temp->words = CreateMap();
 
     GetFileWordData(file->dir, temp);
-    GetTitleWords(temp->title_words, temp->title);
 
     return temp;
 }
@@ -156,20 +154,4 @@ char* RemoveFromWord(char* word)
     strlwr(word2);
 
     return word2;
-}
-
-// Fragmenta el titulo del libro y lo guarda en un HashMap
-void GetTitleWords(HashMap* map, char* title)
-{
-    List* list = SeparateStr(title);
-
-    while (FirstList(list) != NULL)
-    {
-        char* temp = PopFront(list);
-        strlwr(temp);
-
-        InsertMap(map, temp, (void*)true);
-    }
-
-    Free(list);
 }

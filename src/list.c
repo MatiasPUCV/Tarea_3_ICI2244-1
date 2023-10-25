@@ -197,7 +197,7 @@ void* PopBack(List *list)
 
     list->tail = list->tail->prev;
 
-    if (list->tail == NULL)
+    if (list->tail != NULL)
         list->tail->next = NULL;
 
     list->current = list->tail;

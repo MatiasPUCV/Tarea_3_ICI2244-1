@@ -155,29 +155,26 @@ void AppSearchBook(AppData* data)
         pair = NextTreeMap(data->books);
     }
 
-    // Busca cada palabra en cada libro
     while (FirstList(words) != NULL)
     {
-        char* str = PopFront(words);
+        char* word = PopFront(words);
 
-        // Palabra "str" en todo libro
         Book* book = FirstList(books);
         while (book != NULL)
         {
-            Pair* pair = SearchMap(book->title_words, str);
-
-            if (pair != NULL)
+            if (strstr(book->title, word) != NULL)
             {
+                Error("SI - %s on %s \n", word, book->title);
                 book = NextList(books);
             }
             else
             {
+                Error("NO - %s on %s \n", word, book->title);
                 PopCurrent(books);
                 book = CurrentList(books);
             }
         }
         
-        Free(str);
     }
 
     // Mensaje
