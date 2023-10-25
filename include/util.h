@@ -6,10 +6,6 @@
 #include <stddef.h>
 #include <stdbool.h>
 
-static size_t s_mallocCalls;
-static size_t s_freeCalls;
-
-
 // es malloc() y adicionalmente busca errores y cuenta las llamadas a malloc
 void* Malloc(size_t size);
 void* Calloc(size_t count, size_t size);
@@ -29,8 +25,5 @@ int GetIntFromInput();
 List* SeparateStr(char* str);
 bool IsTxt(const char *str);
 char* RemoveExtension(const char* str);
-
-// Debug
-void End();
 
 #endif

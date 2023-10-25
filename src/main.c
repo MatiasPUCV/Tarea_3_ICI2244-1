@@ -21,7 +21,6 @@ int main()
         AppTick(&close, data);
 
     FreeAppData(data);
-    End();
     
     return 0;
 }

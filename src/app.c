@@ -175,11 +175,19 @@ void AppSearchBook(AppData* data)
         
     }
 
+    Free(input);
+
     // Mensaje
     if (FirstList(books) != NULL)
+    {
         printf("Libros encontrados:\n");
+    }
     else
+    {
         printf("No se encontraron coinsidencias\n");
+        Free(books);
+        return;
+    }
 
     // Muestra los libros encontrados
     while (FirstList(books) != NULL)
@@ -189,7 +197,7 @@ void AppSearchBook(AppData* data)
     }
     
     Free(books);
-    Free(input);
+
 }
 
 void AppMoreFrequentWords(AppData* data)

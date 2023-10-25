@@ -18,8 +18,6 @@ void* Malloc(size_t size)
         exit(1);
     }
 
-    s_mallocCalls++;
-
     return ptr;
 }
 
@@ -33,8 +31,6 @@ void* Calloc(size_t count, size_t size)
         exit(1);
     }
 
-    s_mallocCalls++;
-
     return ptr;
 }
 
@@ -45,7 +41,6 @@ void Free(void* ptr)
         return;
 
     free(ptr);
-    s_freeCalls++;
 }
 
 // printf en verde
