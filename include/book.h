@@ -13,6 +13,7 @@ typedef struct Book
     int char_count;
 
     HashMap* words;
+    HashMap* title_words;
 
 } Book;
 

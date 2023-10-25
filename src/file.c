@@ -3,7 +3,6 @@
 
 #include <string.h>
 #include <stdio.h>
-#include <stdlib.h>
 
 File* FileCreate(char* dir, char* name, char* no_ext)
 {

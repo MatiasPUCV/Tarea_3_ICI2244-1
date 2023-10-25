@@ -121,7 +121,6 @@ List* SeparateStr(char *str)
     while (token != NULL)
     {
         PushBack(list, token);
-        Error("%s", token);
         token = strtok(NULL, " ");
     }
 
