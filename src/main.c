@@ -35,6 +35,7 @@ void AppTick(bool* close, AppData* data)
     printf(" 2) Mostrar Documentos\n");
     printf(" 3) Buscar libro\n");
     printf(" 4) Palabras con mayor frecuencia\n");
+    printf(" 5) Palabras más relevante\n");
     printf(" 6) Buscar por palabra\n");
     printf(" 0) Cerrar Applicación\n");
     printf("-----------------------------------\n");
@@ -62,6 +63,11 @@ void AppTick(bool* close, AppData* data)
     case 4:
         Success("Palabras con mayor frecuencia");
         AppMoreFrequentWords(data);
+        break;
+
+    case 5:
+        Success("Palabras más relevante");
+        AppMoreRelevantWord(data);
         break;
 
     case 6:

@@ -38,7 +38,7 @@ int IsEqual(const void *key1, const void *key2)
 
 HashMap* CreateMap()
 {
-    size_t capacity = 2;
+    const size_t capacity = 256;
 
     HashMap* hashMap = (HashMap*)Malloc(sizeof(HashMap));
 

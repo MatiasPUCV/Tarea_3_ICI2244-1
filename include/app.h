@@ -8,6 +8,8 @@ typedef struct AppData
     TreeMap* books;
     TreeMap* books_by_id;
 
+    int docs_count;
+
 } AppData;
 
 AppData* CreateAppData();
@@ -17,6 +19,7 @@ void AppLoadDocuments(AppData* data);
 void AppShowBooks(AppData* data);
 void AppSearchBook(AppData* data);
 void AppMoreFrequentWords(AppData* data);
+void AppMoreRelevantWord(AppData* data);
 
 void AppSearchByWord(AppData* data);
 

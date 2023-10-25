@@ -102,6 +102,8 @@ void GetFileWordData(const char* filename, Book* book)
 
         char* word2 = RemoveFromWord(word);
 
+        // Saca connectores la mayoria de conectores o palabras
+        // repetitivas en el ingles no suelen tener más de 3 caracteres
         if (strlen(word2) <= 3)
         {
             Free(word2);

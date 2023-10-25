@@ -8,6 +8,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 
 // Crea información de la applicacion
 AppData* CreateAppData()
@@ -16,6 +17,7 @@ AppData* CreateAppData()
 
     temp->books       = CreateTreeMap(lower_than_string);
     temp->books_by_id = CreateTreeMap(lower_than_int);
+    temp->docs_count  = 0;
 
     return temp;
 }
@@ -106,6 +108,8 @@ void AppLoadDocuments(AppData* data)
         printf("Cargando \"%s\"...\n", file->dir);
         Book* book = CreateBook(file);
         Success("¡\"%s\" cargado!\n", book->title);
+        
+        data->docs_count++;
 
         InsertTreeMap(data->books, book->title, book);
         InsertTreeMap(data->books_by_id, &book->id, book);
@@ -228,6 +232,8 @@ void AppMoreFrequentWords(AppData* data)
     while (word != NULL && i != 10)
     {
         int value = *((int*)word->value);
+
+        // Calcula la frecuencia
         double frequency =  (double)value / (double)book->word_count;
 
         printf("%s | Frecuencia:  %lf\n", word->key, frequency);
@@ -237,9 +243,95 @@ void AppMoreFrequentWords(AppData* data)
         i++;
     }
 
+    // Libera memoria
     while (HeapTop(words) != NULL)
         HeapPop(words);
     
+    FreeHeap(words);
+    Free(str);
+}
+
+void AppMoreRelevantWord(AppData* data)
+{
+    char* str = GetStrFromInput();
+
+    // Busca el libro, si no lo encuentra salta un error
+    Pair* pair = SearchTreeMap(data->books, str);
+    if (IsEmptyPair(pair))
+    {
+        Error("El libro \"%s\" no existe", str);
+        return;
+    }
+
+    Book* book = (Book*)(pair->value);
+    Heap* words = CreateHeap();
+
+    // Recorre el mapa de palabras
+    pair = FirstMap(book->words);
+    Pair* temp = pair;
+    do
+    {
+        char* word = ((char*)(pair->key));
+        int word_in_docs = 0;
+
+        // Busca cada palabra en cada libro
+        Pair* pair2 = FirstTreeMap(data->books);
+        while(pair2 != NULL)
+        {
+            Book* book2 = (Book*)(pair2->value);
+
+            if (SearchMap(book2->words, word) != NULL)
+                word_in_docs++; // Aumenta la cuenta
+
+            pair2 = NextTreeMap(data->books);
+        }
+
+        // value es el numero de veces que aparece en un libro
+        int value = *((int*)(pair->value));
+
+        // Calcula la relevacia. Se guarda en el Heap para poder llevarlo junto
+        // con la palabra en un par, dentro del monticulo
+        double* revelancy = Malloc(sizeof(double));
+        *revelancy = (((double)value / (double)book->word_count) * log10((double)data->docs_count / (double)word_in_docs));
+
+        // Saca la prioridad, que es meramente es la relevacia convertida en int
+        unsigned int priority = (unsigned int)((double)(*revelancy * 100000000));
+
+        Pair* heap_data = CreatePair(word, revelancy);
+        HeapPush(words, heap_data, priority);
+
+
+        pair = NextMap(book->words);
+    }
+    while (pair != NULL && pair != temp);
+
+    // Recorre el monticulo 10 veces
+    int i = 0;
+    Pair* haep_pair = HeapTop(words);
+    while (haep_pair != NULL && i != 10)
+    {
+        double* revelancy = ((double*)haep_pair->value);
+
+        printf("%s | Relevancia:  %lf\n", haep_pair->key, *revelancy);
+
+        Free(revelancy);
+
+        HeapPop(words);
+        haep_pair = HeapTop(words);
+        i++;
+    }
+
+    // Libera memoria
+    while (HeapTop(words) != NULL)
+    {
+        Pair* temp = HeapTop(words);
+
+        Free(temp->value);
+        Free(temp);
+
+        HeapPop(words);
+    }
+
     FreeHeap(words);
     Free(str);
 }
@@ -265,7 +357,6 @@ void AppSearchByWord(AppData* data)
             int priority = *((int*)(pair->value));
             HeapPush(books, book, priority);
         }
-
 
         pair = NextTreeMap(data->books);
     }
