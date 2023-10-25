@@ -155,18 +155,14 @@ void AppSearchBook(AppData* data)
         pair = NextTreeMap(data->books);
     }
 
-    // Busca cada palabra en cada libro
     while (FirstList(words) != NULL)
     {
-        char* str = PopFront(words);
+        char* word = PopFront(words);
 
-        // Palabra "str" en todo libro
         Book* book = FirstList(books);
         while (book != NULL)
         {
-            Pair* pair = SearchMap(book->title_words, str);
-
-            if (pair != NULL)
+            if (strstr(book->title, word) != NULL)
             {
                 book = NextList(books);
             }
@@ -177,7 +173,6 @@ void AppSearchBook(AppData* data)
             }
         }
         
-        Free(str);
     }
 
     // Mensaje
